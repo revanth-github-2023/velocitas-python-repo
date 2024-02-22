@@ -16,7 +16,7 @@
 
 import json
 import logging
-from pathlib import Path
+#from pathlib import Path
 
 from vehicle import Vehicle  # type: ignore
 from velocitas_sdk.util.log import (  # type: ignore
@@ -26,24 +26,24 @@ from velocitas_sdk.util.log import (  # type: ignore
 from velocitas_sdk.vdb.reply import DataPointReply
 from velocitas_sdk.vehicle_app import VehicleApp, subscribe_topic
 
-predictions_nam = ''
-
+predictions_nam = ""
+###
 # Landing AI code start
 # Landing AI code
-from PIL import Image
-from landingai.predict import Predictor
+# from PIL import Image
+# from landingai.predict import Predictor
 # Enter your API Key
-endpoint_id = "3e33792b-ccea-4686-a017-467360a8e722"
-api_key = "land_sk_5tM0iof3EbYieyGlQfJkDqVlDLuEA3H58ZpGZiiC1vS4jvreGx"
+# endpoint_id = "3e33792b-ccea-4686-a017-467360a8e722"
+# api_key = "land_sk_5tM0iof3EbYieyGlQfJkDqVlDLuEA3H58ZpGZiiC1vS4jvreGx"
 # Load your image
-print(Path.cwd())
-image = Image.open("/workspaces/velocitas-python-repo/IMG_1710.jpeg")
+# print(Path.cwd())
+# image = Image.open("/workspaces/velocitas-python-repo/IMG_1710.jpeg")
 # Run inference
-predictor = Predictor(endpoint_id, api_key=api_key)
-predictions = predictor.predict(image)
-predictions_nam = predictions[0].label_name;
+# predictor = Predictor(endpoint_id, api_key=api_key)
+# predictions = predictor.predict(image)
+# predictions_nam = predictions[0].label_name;
 # Landing AI code end
-
+###
 
 logging.setLogRecordFactory(get_opentelemetry_log_factory())
 logging.basicConfig(format=get_opentelemetry_log_format())
@@ -95,13 +95,14 @@ class SeatAdjusterApp(VehicleApp):
         position = data["position"]
         if vehicle_speed == 0:
             try:
-                if predictions_nam == 'revanth':
+                if predictions_nam == "revanth":
                     await self.Vehicle.Cabin.Seat.Row1.Pos1.Position.set(position)
                     response_data["result"] = {
                         "status": 0,
                         "message": f"Set Seat position to: {position}",
                     }
                 else:
+                    await self.Vehicle.Cabin.Seat.Row1.Pos1.Position.set(position)
                     response_data["result"] = {
                         "status": 1,
                         "message": "Person Authentication failed",
